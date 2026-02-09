@@ -48,8 +48,8 @@
     const HALF_BLOCK = 512;
     const LOD_UPDATE_MS = 500;
 
-    const HLOD_THRESHOLDS = [8000, 15000]; // [Lod0 max, Lod1 max]; beyond = Lod2
-    const TERRAIN_THRESHOLD = 4000;
+    const HLOD_THRESHOLDS = [12000, 22000]; // [Lod0 max, Lod1 max]; beyond = Lod2
+    const TERRAIN_THRESHOLD = 6000;
     const CITY_SOUTH_OFFSET = BLOCK_SIZE;
 
     const WALK_BASE_SPEED = 200;
@@ -477,9 +477,7 @@
 
         if (block.activeHlod === hlodKey && block.activeTerrain === terrainKey) return;
 
-        for (const m of block.meshes) scene.remove(m);
-        block.meshes = [];
-
+        // Load new meshes FIRST, before removing old ones
         const loads = [];
         if (hlodLod !== null) {
             for (const data of block.hlod[hlodLod]) {
@@ -492,9 +490,16 @@
             }
         }
 
-        const meshes = await Promise.all(loads);
-        for (const m of meshes) {
-            if (!m) continue;
+        const newMeshes = (await Promise.all(loads)).filter(m => m);
+
+        // If we expected to load meshes but all failed, keep old LOD visible
+        if (loads.length > 0 && newMeshes.length === 0) return;
+
+        // Now that new meshes are ready, remove old ones and swap in
+        for (const m of block.meshes) scene.remove(m);
+        block.meshes = [];
+
+        for (const m of newMeshes) {
             scene.add(m);
             block.meshes.push(m);
         }
@@ -532,18 +537,18 @@
         );
         if (availLod === null || ce.activeLod === availLod) return;
 
+        const newMesh = await loadCityMesh(ce.entry, availLod);
+        if (!newMesh) return;
+
         if (ce.mesh) {
             scene.remove(ce.mesh);
             if (ce.activeLod !== null) state.stats.city[ce.activeLod] = Math.max(0, state.stats.city[ce.activeLod] - 1);
         }
 
-        const mesh = await loadCityMesh(ce.entry, availLod);
-        if (mesh) {
-            scene.add(mesh);
-            ce.mesh = mesh;
-            ce.activeLod = availLod;
-            state.stats.city[availLod]++;
-        }
+        scene.add(newMesh);
+        ce.mesh = newMesh;
+        ce.activeLod = availLod;
+        state.stats.city[availLod]++;
     }
 
     // #section refresh helpers
