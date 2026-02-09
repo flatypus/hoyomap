@@ -210,7 +210,7 @@
 
     const mondstadtTex = new THREE.Texture();
     mondstadtTex.colorSpace = THREE.SRGBColorSpace;
-    fetchTexture(GAME_DATA + '/textures/Stages_Texture_Area_Mengde_City_HLOD_Combined_Diffuse.png')
+    fetchTexture('/Stages_Texture_Area_Mengde_City_HLOD_Combined_Diffuse.png')
         .then(tex => { mondstadtTex.image = tex.image; mondstadtTex.needsUpdate = true; })
         .catch(() => console.log('Mondstadt texture unavailable'));
 
@@ -889,7 +889,7 @@
 
     // #section init & animate
     async function init() {
-        fetchTexture(BASE + '/skybox.png').then(tex => {
+        fetchTexture('/skybox.png').then(tex => {
             const pmrem = new THREE.PMREMGenerator(renderer);
             const env = pmrem.fromEquirectangular(tex).texture;
             scene.environment = env;
