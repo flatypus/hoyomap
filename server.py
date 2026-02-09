@@ -70,9 +70,8 @@ class Handler(http.server.SimpleHTTPRequestHandler):
                     return self._serve_file(resolved, ctype)
                 return self.send_error(404)
 
-        # Default: serve static files (index.html, etc.)
         if path == "/":
-            self.path = "/index.html"
+            self.path = "public/index.html"
         super().do_GET()
 
     def _serve_json(self, data):
