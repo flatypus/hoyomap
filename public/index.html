@@ -2,6 +2,21 @@
 <html>
 <head>
     <title>Teyvat Map</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <meta property="og:title" content="Teyvat Map">
+    <meta property="og:description" content="Interactive 3D map of Teyvat from Genshin Impact with dynamic LOD streaming">
+    <meta property="og:image" content="https://cdn.flatypus.me/genshin/thmb.jpg">
+    <meta property="og:url" content="https://cdn.flatypus.me/genshin/">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Teyvat Map">
+    
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Teyvat Map">
+    <meta name="twitter:description" content="Interactive 3D map of Teyvat from Genshin Impact with dynamic LOD streaming">
+    <meta name="twitter:image" content="https://cdn.flatypus.me/genshin/thmb.jpg">
+    
     <link rel="icon" type="image/png" href="https://cdn.flatypus.me/genshin/favicon.png">
     <style>
         body { margin: 0; overflow: hidden; background: #0a0a0f; }
@@ -13,6 +28,10 @@
             border: 1px solid #30363d; min-width: 200px;
             user-select: none;
         }
+        #hud .header { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; padding-bottom: 8px; border-bottom: 1px solid #30363d; }
+        #hud .header a { display: flex; align-items: center; gap: 8px; text-decoration: none; }
+        #hud .header img { width: 20px; height: 20px; }
+        #hud .header h1 { margin: 0; font-size: 18px; font-weight: 600; color: #ffffff; }
         #hud .l { color: #8b949e; }
         #hud .v { color: #58a6ff; }
         #hud .o { color: #f0883e; }
@@ -29,7 +48,7 @@
     </style>
 </head>
 <body>
-    <div id="hud">Loading manifest...</div>
+    <div id="hud"></div>
 
     <script type="importmap">
     { "imports": { "three": "https://unpkg.com/three@0.157.0/build/three.module.js", "three/addons/": "https://unpkg.com/three@0.157.0/examples/jsm/" } }
@@ -41,7 +60,7 @@
     import { PointerLockControls } from 'three/addons/controls/PointerLockControls.js';
     import { OBJLoader } from 'three/addons/loaders/OBJLoader.js';
     import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
-    const IS_PROD = true;
+    const IS_PROD = false;
     const PATH = IS_PROD ? 'https://cdn.flatypus.me/genshin' : 'http://127.0.0.1:8080';
     const GAME_DATA = `${PATH}/game_data`;
     const BASE = PATH;
@@ -824,6 +843,12 @@
             `<div>[${key}] ${label}: <span class="${on ? 'on' : 'off'}">${on ? 'ON' : 'OFF'}</span></div>`;
 
         let html = `
+            <div class="header">
+                <a href="https://github.com/flatypus/hoyomap" target="_blank">
+                    <img src="https://github.githubassets.com/favicons/favicon.svg" alt="GitHub">
+                    <h1>HoyoMap</h1>
+                </a>
+            </div>
             <div><span class="l">Camera:</span> <span class="v">${x|0}, ${y|0}, ${z|0}</span></div>
             <div class="section"><span class="l">HLOD:</span></div>
             <div class="row"><span class="l">L0:</span> <span class="v">${s.hlod[0]}</span> <span class="l">L1:</span> <span class="v">${s.hlod[1]}</span> <span class="l">L2:</span> <span class="v">${s.hlod[2]}</span></div>
@@ -892,6 +917,8 @@
 
     // #section init & animate
     async function init() {
+        updateHud();
+        
         fetchTexture('/skybox.png').then(tex => {
             const pmrem = new THREE.PMREMGenerator(renderer);
             const env = pmrem.fromEquirectangular(tex).texture;
@@ -907,10 +934,10 @@
         state.manifest = await manifestResp.json();
         const allHlod = await allHlodResp.json();
 
-        hud.textContent = 'Loading overrides...';
+        updateHud();
         await loadOverrides();
 
-        hud.textContent = 'Initializing blocks...';
+        updateHud();
         const allKeys = new Set([
             ...Object.keys(state.manifest.hlod || {}),
             ...Object.keys(state.manifest.terrain || {}),
@@ -920,13 +947,13 @@
             initBlock(key, bx, bz, state.manifest);
         }
 
-        hud.textContent = 'Loading ocean...';
+        updateHud();
         await loadOcean();
 
-        hud.textContent = 'Initializing city...';
+        updateHud();
         initCityEntries(allHlod);
 
-        hud.textContent = `Ready - ${state.blocks.size} blocks, ${state.cityEntries.length} city entries`;
+        updateHud();
         animate();
     }
 
