@@ -59,6 +59,9 @@
     const WALK_DEFAULT_MULT = 100;
     const WALK_HEIGHT = 50;
 
+    const MAX_ASSET_LOAD_COUNT = 20;
+    const MAX_RETRIES = 3;
+
     const DEBUG_COLORS = {
         hlod_0: 0xff0000,    hlod_1: 0xff6600,    hlod_2: 0xffcc00,
         terrain_0: 0x00ff00, terrain_1: 0x00ffff,  terrain_2: 0x0066ff,
@@ -107,6 +110,48 @@
         lodUpdateInProgress: false,
     };
 
+    // #section loader queue
+    const loaderQueue = {
+        pending: [],
+        active: 0,
+
+        enqueue(taskFn) {
+            return new Promise((resolve, reject) => {
+                this.pending.push({ taskFn, resolve, reject });
+                this._flush();
+            });
+        },
+
+        _flush() {
+            while (this.active < MAX_ASSET_LOAD_COUNT && this.pending.length > 0) {
+                const job = this.pending.shift();
+                this.active++;
+                this._run(job);
+            }
+        },
+
+        async _run({ taskFn, resolve, reject }) {
+            let lastError;
+            for (let attempt = 0; attempt <= MAX_RETRIES; attempt++) {
+                try {
+                    const result = await taskFn();
+                    resolve(result);
+                    this.active--;
+                    this._flush();
+                    return;
+                } catch (err) {
+                    lastError = err;
+                    if (attempt < MAX_RETRIES) {
+                        await new Promise(r => setTimeout(r, 300 * (attempt + 1)));
+                    }
+                }
+            }
+            reject(lastError);
+            this.active--;
+            this._flush();
+        },
+    };
+
     // #section scene setup
 
     const scene = new THREE.Scene();
@@ -143,13 +188,15 @@
     // Load textures via fetch() instead of TextureLoader (<img> tags)
     // to avoid CORS issues — fetch() shares the same CORS path as OBJLoader
     async function fetchTexture(url) {
-        const resp = await fetch(url);
-        if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
-        const blob = await resp.blob();
-        const bitmap = await createImageBitmap(blob);
-        const tex = new THREE.CanvasTexture(bitmap);
-        tex.colorSpace = THREE.SRGBColorSpace;
-        return tex;
+        return loaderQueue.enqueue(async () => {
+            const resp = await fetch(url);
+            if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+            const blob = await resp.blob();
+            const bitmap = await createImageBitmap(blob);
+            const tex = new THREE.CanvasTexture(bitmap);
+            tex.colorSpace = THREE.SRGBColorSpace;
+            return tex;
+        });
     }
 
     const mondstadtTex = new THREE.Texture();
@@ -336,44 +383,46 @@
 
         state.loading.add(filename);
 
-        return new Promise(resolve => {
-            objLoader.load(url, async obj => {
-                obj.traverse(c => {
-                    if (!c.isMesh || !c.geometry) return;
-                    if (type === 'terrain' && localPos) generateTerrainUVs(c.geometry, localPos);
-                    else generatePlanarUVs(c.geometry);
-                });
+        try {
+            const obj = await loaderQueue.enqueue(() => new Promise((resolve, reject) => {
+                objLoader.load(url, resolve, undefined, reject);
+            }));
 
-                const lod = extractLod(filename);
-                const tex = state.debug ? null : await loadTexture(bx, bz);
-                const mat = makeMaterial(type, lod, tex);
-                obj.traverse(c => { if (c.isMesh) c.material = mat; });
-
-                const box = new THREE.Box3().setFromObject(obj);
-                const center = new THREE.Vector3();
-                box.getCenter(center);
-                const tx = -bx;
-
-                if (type === 'hlod') {
-                    obj.position.set(tx * BLOCK_SIZE + HALF_BLOCK - center.x, 0, bz * BLOCK_SIZE + HALF_BLOCK - center.z);
-                } else if (localPos) {
-                    obj.position.set(tx * BLOCK_SIZE + localPos.x, localPos.y, bz * BLOCK_SIZE + localPos.z);
-                }
-
-                state.meshCache.set(filename, obj);
-                state.loading.delete(filename);
-                state.stats[type][lod]++;
-
-                const clone = obj.clone();
-                const id = meshId(type, bx, bz, filename, localPos);
-                registerMesh(clone, id, clone.position.clone());
-                resolve(clone);
-            }, undefined, () => {
-                state.failedUrls.add(url);
-                state.loading.delete(filename);
-                resolve(null);
+            obj.traverse(c => {
+                if (!c.isMesh || !c.geometry) return;
+                if (type === 'terrain' && localPos) generateTerrainUVs(c.geometry, localPos);
+                else generatePlanarUVs(c.geometry);
             });
-        });
+
+            const lod = extractLod(filename);
+            const tex = state.debug ? null : await loadTexture(bx, bz);
+            const mat = makeMaterial(type, lod, tex);
+            obj.traverse(c => { if (c.isMesh) c.material = mat; });
+
+            const box = new THREE.Box3().setFromObject(obj);
+            const center = new THREE.Vector3();
+            box.getCenter(center);
+            const tx = -bx;
+
+            if (type === 'hlod') {
+                obj.position.set(tx * BLOCK_SIZE + HALF_BLOCK - center.x, 0, bz * BLOCK_SIZE + HALF_BLOCK - center.z);
+            } else if (localPos) {
+                obj.position.set(tx * BLOCK_SIZE + localPos.x, localPos.y, bz * BLOCK_SIZE + localPos.z);
+            }
+
+            state.meshCache.set(filename, obj);
+            state.loading.delete(filename);
+            state.stats[type][lod]++;
+
+            const clone = obj.clone();
+            const id = meshId(type, bx, bz, filename, localPos);
+            registerMesh(clone, id, clone.position.clone());
+            return clone;
+        } catch {
+            state.failedUrls.add(url);
+            state.loading.delete(filename);
+            return null;
+        }
     }
 
     async function loadCityMesh(entry, lod) {
@@ -398,28 +447,30 @@
 
         state.loading.add(filename);
 
-        return new Promise(resolve => {
-            objLoader.load(url, obj => {
-                const mat = makeCityMaterial(entry.name, lod);
-                obj.traverse(c => { if (c.isMesh) c.material = mat; });
+        try {
+            const obj = await loaderQueue.enqueue(() => new Promise((resolve, reject) => {
+                objLoader.load(url, resolve, undefined, reject);
+            }));
 
-                if (entry.position) {
-                    obj.position.set(-entry.position.x + CITY_SOUTH_OFFSET, entry.position.y, entry.position.z);
-                }
+            const mat = makeCityMaterial(entry.name, lod);
+            obj.traverse(c => { if (c.isMesh) c.material = mat; });
 
-                state.meshCache.set(cacheKey, obj);
-                state.loading.delete(filename);
+            if (entry.position) {
+                obj.position.set(-entry.position.x + CITY_SOUTH_OFFSET, entry.position.y, entry.position.z);
+            }
 
-                const clone = obj.clone();
-                const id = meshId('city', 0, 0, filename, null, entry.name);
-                registerMesh(clone, id, clone.position.clone());
-                resolve(clone);
-            }, undefined, () => {
-                state.failedUrls.add(url);
-                state.loading.delete(filename);
-                resolve(null);
-            });
-        });
+            state.meshCache.set(cacheKey, obj);
+            state.loading.delete(filename);
+
+            const clone = obj.clone();
+            const id = meshId('city', 0, 0, filename, null, entry.name);
+            registerMesh(clone, id, clone.position.clone());
+            return clone;
+        } catch {
+            state.failedUrls.add(url);
+            state.loading.delete(filename);
+            return null;
+        }
     }
 
     async function loadOcean() {
@@ -428,27 +479,30 @@
         if (state.failedUrls.has(url) || state.loading.has('ocean.glb')) return;
 
         state.loading.add('ocean.glb');
-        return new Promise(resolve => {
-            gltfLoader.load(url, gltf => {
-                const obj = gltf.scene;
-                const mat = makeMaterial('water', 0);
-                obj.traverse(c => { if (c.isMesh) c.material = mat; });
-                obj.position.set(BLOCK_SIZE, 210, 0);
 
-                const id = meshId('water', 0, 0, 'ocean');
-                registerMesh(obj, id, obj.position.clone());
+        try {
+            const gltf = await loaderQueue.enqueue(() => new Promise((resolve, reject) => {
+                gltfLoader.load(url, resolve, undefined, reject);
+            }));
 
-                scene.add(obj);
-                state.oceanMesh = obj;
-                state.loading.delete('ocean.glb');
-                state.stats.water = 1;
-                resolve(obj);
-            }, undefined, () => {
-                state.failedUrls.add(url);
-                state.loading.delete('ocean.glb');
-                resolve(null);
-            });
-        });
+            const obj = gltf.scene;
+            const mat = makeMaterial('water', 0);
+            obj.traverse(c => { if (c.isMesh) c.material = mat; });
+            obj.position.set(BLOCK_SIZE, 210, 0);
+
+            const id = meshId('water', 0, 0, 'ocean');
+            registerMesh(obj, id, obj.position.clone());
+
+            scene.add(obj);
+            state.oceanMesh = obj;
+            state.loading.delete('ocean.glb');
+            state.stats.water = 1;
+            return obj;
+        } catch {
+            state.failedUrls.add(url);
+            state.loading.delete('ocean.glb');
+            return null;
+        }
     }
 
     // #section block lod management
@@ -706,7 +760,7 @@
             <div class="row"><span class="l">L0:</span> <span class="v">${s.terrain[0]}</span> <span class="l">L1:</span> <span class="v">${s.terrain[1]}</span> <span class="l">L2:</span> <span class="v">${s.terrain[2]}</span></div>
             <div class="section"><span class="l">City:</span></div>
             <div class="row"><span class="l">L0:</span> <span class="v">${s.city[0]}</span> <span class="l">L1:</span> <span class="v">${s.city[1]}</span> <span class="l">L2:</span> <span class="v">${s.city[2]}</span></div>
-            <div class="section"><span class="l">Water:</span> <span class="v">${s.water}</span> | <span class="l">Blocks:</span> <span class="v">${s.activeBlocks}</span> | <span class="l">Loading:</span> <span class="o">${state.loading.size}</span></div>
+            <div class="section"><span class="l">Water:</span> <span class="v">${s.water}</span> | <span class="l">Blocks:</span> <span class="v">${s.activeBlocks}</span> | <span class="l">Loading:</span> <span class="o">${loaderQueue.active}/${MAX_ASSET_LOAD_COUNT}</span> <span class="l">Queued:</span> <span class="o">${loaderQueue.pending.length}</span></div>
             <div class="toggles">
                 ${toggle('F', 'Walk', state.walk)}
                 ${toggle('D', 'Debug', state.debug)}
