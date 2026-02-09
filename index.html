@@ -2,6 +2,7 @@
 <html>
 <head>
     <title>Teyvat Map</title>
+    <link rel="icon" type="image/png" href="https://cdn.flatypus.me/genshin/favicon.png">
     <style>
         body { margin: 0; overflow: hidden; background: #0a0a0f; }
         canvas { display: block; }
@@ -138,10 +139,24 @@
 
     const objLoader = new OBJLoader();
     const gltfLoader = new GLTFLoader();
-    const texLoader = new THREE.TextureLoader();
 
-    const mondstadtTex = texLoader.load(CDN + '/textures/Stages_Texture_Area_Mengde_City_HLOD_Combined_Diffuse.png');
+    // Load textures via fetch() instead of TextureLoader (<img> tags)
+    // to avoid CORS issues — fetch() shares the same CORS path as OBJLoader
+    async function fetchTexture(url) {
+        const resp = await fetch(url);
+        if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+        const blob = await resp.blob();
+        const bitmap = await createImageBitmap(blob);
+        const tex = new THREE.CanvasTexture(bitmap);
+        tex.colorSpace = THREE.SRGBColorSpace;
+        return tex;
+    }
+
+    const mondstadtTex = new THREE.Texture();
     mondstadtTex.colorSpace = THREE.SRGBColorSpace;
+    fetchTexture(CDN + '/textures/Stages_Texture_Area_Mengde_City_HLOD_Combined_Diffuse.png')
+        .then(tex => { mondstadtTex.image = tex.image; mondstadtTex.needsUpdate = true; })
+        .catch(() => console.log('Mondstadt texture unavailable'));
 
     // #section materials
 
@@ -218,23 +233,21 @@
     }
 
     // #section texture loading
-    function loadTexture(bx, bz) {
+    async function loadTexture(bx, bz) {
         const key = `${bx}_${bz}`;
-        if (state.textureCache.has(key)) return Promise.resolve(state.textureCache.get(key));
+        if (state.textureCache.has(key)) return state.textureCache.get(key);
 
         const url = CDN + `/textures/BigWorldTerrain_${bx}_${bz}.bin_BaseMap.png`;
-        if (state.failedUrls.has(url)) return Promise.resolve(null);
+        if (state.failedUrls.has(url)) return null;
 
-        return new Promise(resolve => {
-            texLoader.load(url, tex => {
-                tex.colorSpace = THREE.SRGBColorSpace;
-                state.textureCache.set(key, tex);
-                resolve(tex);
-            }, undefined, () => {
-                state.failedUrls.add(url);
-                resolve(null);
-            });
-        });
+        try {
+            const tex = await fetchTexture(url);
+            state.textureCache.set(key, tex);
+            return tex;
+        } catch {
+            state.failedUrls.add(url);
+            return null;
+        }
     }
 
     // #section mesh id & position overrides
@@ -754,13 +767,13 @@
 
     // #section init & animate
     async function init() {
-        texLoader.load(BASE + '/skybox.png', tex => {
+        fetchTexture(BASE + '/skybox.png').then(tex => {
             const pmrem = new THREE.PMREMGenerator(renderer);
             const env = pmrem.fromEquirectangular(tex).texture;
             scene.environment = env;
             scene.background = env;
             pmrem.dispose();
-        }, undefined, () => console.log('No skybox available'));
+        }).catch(() => console.log('No skybox available'));
 
         const [manifestResp, allHlodResp] = await Promise.all([
             fetch(BASE + '/manifests/android_manifest.json'),
@@ -780,21 +793,6 @@
         for (const key of allKeys) {
             const [bx, bz] = key.split('_').map(Number);
             initBlock(key, bx, bz, state.manifest);
-        }
-
-        // Discover extra HLOD blocks not in manifest
-        const hlodListUrl = IS_PROD ? CDN + '/hlod_list.json' : '/list_hlod';
-        const hlodFiles = await fetch(hlodListUrl).then(r => r.json()).catch(() => []);
-        for (const f of hlodFiles) {
-            if (!f.includes('Lod0')) continue;
-            const m = f.match(/Stages_BigWorld_(-?\d+)_(-?\d+)_/);
-            if (!m) continue;
-            const bx = parseInt(m[1]), bz = parseInt(m[2]);
-            const key = `${bx}_${bz}`;
-            if (!state.blocks.has(key)) {
-                const block = initBlock(key, bx, bz, state.manifest);
-                block.hlod[0].push({ file: f, position: { x: 0, y: 0, z: 0 } });
-            }
         }
 
         hud.textContent = 'Loading ocean...';
