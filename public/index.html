@@ -194,17 +194,20 @@
     const objLoader = new OBJLoader();
     const gltfLoader = new GLTFLoader();
 
-    // Load textures via fetch() instead of TextureLoader (<img> tags)
-    // to avoid CORS issues — fetch() shares the same CORS path as OBJLoader
+    const textureLoader = new THREE.TextureLoader();
     async function fetchTexture(url) {
-        return loaderQueue.enqueue(async () => {
-            const resp = await fetch(url);
-            if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
-            const blob = await resp.blob();
-            const bitmap = await createImageBitmap(blob);
-            const tex = new THREE.CanvasTexture(bitmap);
-            tex.colorSpace = THREE.SRGBColorSpace;
-            return tex;
+        return loaderQueue.enqueue(() => {
+            return new Promise((resolve, reject) => {
+                textureLoader.load(
+                    url,
+                    (texture) => {
+                        texture.colorSpace = THREE.SRGBColorSpace;
+                        resolve(texture);
+                    },
+                    undefined,
+                    reject
+                );
+            });
         });
     }
 
