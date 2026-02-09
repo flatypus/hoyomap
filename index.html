@@ -41,9 +41,10 @@
     import { PointerLockControls } from 'three/addons/controls/PointerLockControls.js';
     import { OBJLoader } from 'three/addons/loaders/OBJLoader.js';
     import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
-    const IS_PROD = !['localhost', '127.0.0.1'].includes(window.location.hostname);
-    const CDN = IS_PROD ? 'https://cdn.flatypus.me/genshin/game_data' : '';
-    const BASE = IS_PROD ? 'https://cdn.flatypus.me/genshin' : '';
+    const IS_PROD = false;
+    const PATH = IS_PROD ? 'https://cdn.flatypus.me/genshin' : 'http://127.0.0.1:8080';
+    const GAME_DATA = `${PATH}/game_data`;
+    const BASE = PATH;
 
     const BLOCK_SIZE = 1024;
     const HALF_BLOCK = 512;
@@ -159,8 +160,7 @@
     scene.fog = new THREE.Fog(0xadd8e6, 15000, 40000);
 
     const camera = new THREE.PerspectiveCamera(60, innerWidth / innerHeight, 1, 100000);
-    camera.position.set(0, 8000, 8000);
-
+    camera.position.set(6000, 8000, 4000);
     const renderer = new THREE.WebGLRenderer({ antialias: true, logarithmicDepthBuffer: true });
     renderer.setSize(innerWidth, innerHeight);
     renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
@@ -176,6 +176,15 @@
     orbitControls.dampingFactor = 0.05;
     orbitControls.maxDistance = 50000;
     orbitControls.minDistance = 100;
+    const yaw = -Math.PI / 2;
+    const pitch = -Math.PI / 3;
+    const dist = 10000;
+    orbitControls.target.set(
+        camera.position.x + dist * Math.sin(yaw) * Math.cos(pitch),
+        camera.position.y + dist * Math.sin(pitch),
+        camera.position.z - dist * Math.cos(yaw) * Math.cos(pitch)
+    );
+    orbitControls.update();
 
     const pointerControls = new PointerLockControls(camera, document.body);
     const velocity = new THREE.Vector3();
@@ -201,7 +210,7 @@
 
     const mondstadtTex = new THREE.Texture();
     mondstadtTex.colorSpace = THREE.SRGBColorSpace;
-    fetchTexture(CDN + '/textures/Stages_Texture_Area_Mengde_City_HLOD_Combined_Diffuse.png')
+    fetchTexture(GAME_DATA + '/textures/Stages_Texture_Area_Mengde_City_HLOD_Combined_Diffuse.png')
         .then(tex => { mondstadtTex.image = tex.image; mondstadtTex.needsUpdate = true; })
         .catch(() => console.log('Mondstadt texture unavailable'));
 
@@ -284,7 +293,7 @@
         const key = `${bx}_${bz}`;
         if (state.textureCache.has(key)) return state.textureCache.get(key);
 
-        const url = CDN + `/textures/BigWorldTerrain_${bx}_${bz}.bin_BaseMap.png`;
+        const url = GAME_DATA + `/textures/BigWorldTerrain_${bx}_${bz}.bin_BaseMap.png`;
         if (state.failedUrls.has(url)) return null;
 
         try {
@@ -363,7 +372,9 @@
     }
 
     // #section mesh loading
-    async function loadBlockMesh(filename, type, bx, bz, localPos) {
+    const PLACEHOLDER_COLOR = 0x8fbc8f;
+
+    async function loadBlockMesh(filename, type, bx, bz, localPos, noTexture) {
         if (state.meshCache.has(filename)) {
             const clone = state.meshCache.get(filename).clone();
             if (state.debug) {
@@ -378,7 +389,7 @@
 
         if (state.loading.has(filename)) return null;
         const endpoint = type === 'hlod' ? '/hlod/' : '/terrain/';
-        const url = CDN + endpoint + filename;
+        const url = GAME_DATA + endpoint + filename;
         if (state.failedUrls.has(url)) return null;
 
         state.loading.add(filename);
@@ -395,9 +406,11 @@
             });
 
             const lod = extractLod(filename);
-            const tex = state.debug ? null : await loadTexture(bx, bz);
-            const mat = makeMaterial(type, lod, tex);
-            obj.traverse(c => { if (c.isMesh) c.material = mat; });
+
+            const sharedMat = state.debug
+                ? makeMaterial(type, lod)
+                : new THREE.MeshStandardMaterial({ color: PLACEHOLDER_COLOR, side: THREE.DoubleSide });
+            obj.traverse(c => { if (c.isMesh) c.material = sharedMat; });
 
             const box = new THREE.Box3().setFromObject(obj);
             const center = new THREE.Vector3();
@@ -414,7 +427,19 @@
             state.loading.delete(filename);
             state.stats[type][lod]++;
 
+            if (!state.debug && !noTexture) {
+                loadTexture(bx, bz).then(tex => {
+                    if (tex) {
+                        sharedMat.map = tex;
+                        sharedMat.color.set(0xffffff);
+                        sharedMat.needsUpdate = true;
+                    }
+                });
+            }
+
             const clone = obj.clone();
+            clone.traverse(c => { if (c.isMesh) c.material = sharedMat; });
+
             const id = meshId(type, bx, bz, filename, localPos);
             registerMesh(clone, id, clone.position.clone());
             return clone;
@@ -442,7 +467,7 @@
         }
 
         if (state.loading.has(filename)) return null;
-        const url = CDN + '/hlod_all/' + filename;
+        const url = GAME_DATA + '/hlod_all/' + filename;
         if (state.failedUrls.has(url)) return null;
 
         state.loading.add(filename);
@@ -509,6 +534,9 @@
     function initBlock(key, bx, bz, manifest) {
         if (state.blocks.has(key)) return state.blocks.get(key);
 
+        const noTexture = ['hlod', 'terrain'].some(t =>
+            manifest[t] && manifest[t][key] && manifest[t][key].no_texture
+        );
         const block = {
             bx, bz,
             center: blockCenter(bx, bz),
@@ -517,6 +545,7 @@
             meshes: [],
             activeHlod: null,
             activeTerrain: null,
+            noTexture,
         };
 
         for (const type of ['hlod', 'terrain']) {
@@ -545,35 +574,34 @@
 
         if (block.activeHlod === hlodKey && block.activeTerrain === terrainKey) return;
 
-        // Load new meshes FIRST, before removing old ones
+        // Remove old meshes immediately, then stream new ones in as they load
+        for (const m of block.meshes) scene.remove(m);
+        block.meshes = [];
+        block.activeHlod = hlodKey;
+        block.activeTerrain = terrainKey;
+
+        const addMesh = async (promise) => {
+            const m = await promise;
+            if (m && block.activeHlod === hlodKey && block.activeTerrain === terrainKey) {
+                scene.add(m);
+                block.meshes.push(m);
+            }
+        };
+
         const loads = [];
+        // Load hlod first (big stage meshes) so they appear immediately
         if (hlodLod !== null) {
             for (const data of block.hlod[hlodLod]) {
-                loads.push(loadBlockMesh(data.file, 'hlod', block.bx, block.bz, data.position));
+                loads.push(addMesh(loadBlockMesh(data.file, 'hlod', block.bx, block.bz, data.position, block.noTexture)));
             }
         }
         if (terrainLod !== null) {
             for (const data of block.terrain[terrainLod]) {
-                loads.push(loadBlockMesh(data.file, 'terrain', block.bx, block.bz, data.position));
+                loads.push(addMesh(loadBlockMesh(data.file, 'terrain', block.bx, block.bz, data.position, block.noTexture)));
             }
         }
 
-        const newMeshes = (await Promise.all(loads)).filter(m => m);
-
-        // If we expected to load meshes but all failed, keep old LOD visible
-        if (loads.length > 0 && newMeshes.length === 0) return;
-
-        // Now that new meshes are ready, remove old ones and swap in
-        for (const m of block.meshes) scene.remove(m);
-        block.meshes = [];
-
-        for (const m of newMeshes) {
-            scene.add(m);
-            block.meshes.push(m);
-        }
-
-        block.activeHlod = hlodKey;
-        block.activeTerrain = terrainKey;
+        await Promise.all(loads);
     }
 
     // #section city lod management

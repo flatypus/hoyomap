@@ -265,19 +265,6 @@
       }
     },
     {
-      "name": "Area_BSYJS_City_Constant_HLOD",
-      "lods": {
-        "0": "Area_BSYJS_City_Constant_HLOD_Lod0.obj",
-        "1": "Area_BSYJS_City_Constant_HLOD_Lod1.obj",
-        "2": "Area_BSYJS_City_Constant_HLOD_Lod2.obj"
-      },
-      "position": {
-        "x": 6314.0,
-        "y": 203.0,
-        "z": 9534.0
-      }
-    },
-    {
       "name": "Area_CLSL_City_Constant_HLOD",
       "lods": {
         "0": "Area_CLSL_City_Constant_HLOD_Lod0.obj",
@@ -735,237 +722,6 @@
       }
     },
     {
-      "name": "Area_CyjjDown_HAZD_City_Constant_HLOD",
-      "lods": {
-        "0": "Area_CyjjDown_HAZD_City_Constant_HLOD_Lod0.obj"
-      },
-      "position": {
-        "x": -2347.0,
-        "y": 234.0,
-        "z": 4033.0
-      }
-    },
-    {
-      "name": "Area_CyjjDown_JCYH_City_Constant_HLOD",
-      "lods": {
-        "0": "Area_CyjjDown_JCYH_City_Constant_HLOD_Lod0.obj"
-      },
-      "position": {
-        "x": -2347.0,
-        "y": 234.0,
-        "z": 4033.0
-      }
-    },
-    {
-      "name": "Area_CyjjDown_KCKQ01_City_Constant_HLOD",
-      "lods": {
-        "0": "Area_CyjjDown_KCKQ01_City_Constant_HLOD_Lod0.obj"
-      },
-      "position": {
-        "x": -2347.0,
-        "y": 234.0,
-        "z": 4033.0
-      }
-    },
-    {
-      "name": "Area_CyjjDown_KCKQ_City_Constant_Build_HLOD",
-      "lods": {
-        "0": "Area_CyjjDown_KCKQ_City_Constant_Build_HLOD_Lod0.obj"
-      },
-      "position": {
-        "x": -2347.0,
-        "y": 234.0,
-        "z": 4033.0
-      }
-    },
-    {
-      "name": "Area_CyjjDown_KCKQ_City_Constant_HLOD",
-      "lods": {
-        "0": "Area_CyjjDown_KCKQ_City_Constant_HLOD_Lod0.obj"
-      },
-      "position": {
-        "x": -2347.0,
-        "y": 234.0,
-        "z": 4033.0
-      }
-    },
-    {
-      "name": "Area_CyjjDown_MGK_City_Constant_HLOD",
-      "lods": {
-        "0": "Area_CyjjDown_MGK_City_Constant_HLOD_Lod0.obj"
-      },
-      "position": {
-        "x": -2347.0,
-        "y": 234.0,
-        "z": 4033.0
-      }
-    },
-    {
-      "name": "Area_CyjjDown_QSJD01_City_Constant_HLOD",
-      "lods": {
-        "0": "Area_CyjjDown_QSJD01_City_Constant_HLOD_Lod0.obj"
-      },
-      "position": {
-        "x": -2347.0,
-        "y": 234.0,
-        "z": 4033.0
-      }
-    },
-    {
-      "name": "Area_CyjjDown_QSJD_City_Constant_Build_HLOD",
-      "lods": {
-        "0": "Area_CyjjDown_QSJD_City_Constant_Build_HLOD_Lod0.obj"
-      },
-      "position": {
-        "x": -2347.0,
-        "y": 234.0,
-        "z": 4033.0
-      }
-    },
-    {
-      "name": "Area_CyjjDown_QSJD_City_Constant_HLOD",
-      "lods": {
-        "0": "Area_CyjjDown_QSJD_City_Constant_HLOD_Lod0.obj"
-      },
-      "position": {
-        "x": -2347.0,
-        "y": 234.0,
-        "z": 4033.0
-      }
-    },
-    {
-      "name": "Area_CyjjDown_QXKD01_City_Constant_HLOD",
-      "lods": {
-        "0": "Area_CyjjDown_QXKD01_City_Constant_HLOD_Lod0.obj"
-      },
-      "position": {
-        "x": -2347.0,
-        "y": 234.0,
-        "z": 4033.0
-      }
-    },
-    {
-      "name": "Area_CyjjDown_QXKD02_City_Constant_Build_HLOD",
-      "lods": {
-        "0": "Area_CyjjDown_QXKD02_City_Constant_Build_HLOD_Lod0.obj"
-      },
-      "position": {
-        "x": -2347.0,
-        "y": 234.0,
-        "z": 4033.0
-      }
-    },
-    {
-      "name": "Area_CyjjDown_QXKD02_City_Constant_HLOD",
-      "lods": {
-        "0": "Area_CyjjDown_QXKD02_City_Constant_HLOD_Lod0.obj"
-      },
-      "position": {
-        "x": -2347.0,
-        "y": 234.0,
-        "z": 4033.0
-      }
-    },
-    {
-      "name": "Area_CyjjDown_QXKD_City_Constant_Build_HLOD",
-      "lods": {
-        "0": "Area_CyjjDown_QXKD_City_Constant_Build_HLOD_Lod0.obj"
-      },
-      "position": {
-        "x": -2347.0,
-        "y": 234.0,
-        "z": 4033.0
-      }
-    },
-    {
-      "name": "Area_CyjjDown_QXKD_City_Constant_HLOD",
-      "lods": {
-        "0": "Area_CyjjDown_QXKD_City_Constant_HLOD_Lod0.obj"
-      },
-      "position": {
-        "x": -2347.0,
-        "y": 234.0,
-        "z": 4033.0
-      }
-    },
-    {
-      "name": "Area_CyjjDown_SMYJ_City_Constant_HLOD",
-      "lods": {
-        "0": "Area_CyjjDown_SMYJ_City_Constant_HLOD_Lod0.obj"
-      },
-      "position": {
-        "x": -2347.0,
-        "y": 234.0,
-        "z": 4033.0
-      }
-    },
-    {
-      "name": "Area_CyjjDown_TKDDSP_City_Constant_HLOD",
-      "lods": {
-        "0": "Area_CyjjDown_TKDDSP_City_Constant_HLOD_Lod0.obj"
-      },
-      "position": {
-        "x": -2347.0,
-        "y": 234.0,
-        "z": 4033.0
-      }
-    },
-    {
-      "name": "Area_CyjjDown_TKDXSP_City_Constant_HLOD",
-      "lods": {
-        "0": "Area_CyjjDown_TKDXSP_City_Constant_HLOD_Lod0.obj"
-      },
-      "position": {
-        "x": -2347.0,
-        "y": 234.0,
-        "z": 4033.0
-      }
-    },
-    {
-      "name": "Area_CyjjDown_XCYJ_City_Constant_HLOD",
-      "lods": {
-        "0": "Area_CyjjDown_XCYJ_City_Constant_HLOD_Lod0.obj"
-      },
-      "position": {
-        "x": -2347.0,
-        "y": 234.0,
-        "z": 4033.0
-      }
-    },
-    {
-      "name": "Area_CyjjDown_XMSG_City_Constant_HLOD",
-      "lods": {
-        "0": "Area_CyjjDown_XMSG_City_Constant_HLOD_Lod0.obj"
-      },
-      "position": {
-        "x": -2347.0,
-        "y": 234.0,
-        "z": 4033.0
-      }
-    },
-    {
-      "name": "Area_CyjjDown_YGQJ_City_Constant_HLOD",
-      "lods": {
-        "0": "Area_CyjjDown_YGQJ_City_Constant_HLOD_Lod0.obj"
-      },
-      "position": {
-        "x": -2347.0,
-        "y": 234.0,
-        "z": 4033.0
-      }
-    },
-    {
-      "name": "Area_CyjjDown_YJJS_City_Constant_HLOD",
-      "lods": {
-        "0": "Area_CyjjDown_YJJS_City_Constant_HLOD_Lod0.obj"
-      },
-      "position": {
-        "x": -2347.0,
-        "y": 234.0,
-        "z": 4033.0
-      }
-    },
-    {
       "name": "Area_CyjjUp_Cave02_City_Constant_HLOD",
       "lods": {
         "0": "Area_CyjjUp_Cave02_City_Constant_HLOD_Lod0.obj"
@@ -1153,40 +909,6 @@
       }
     },
     {
-      "name": "Area_EZFD_City_Constant_HLOD",
-      "lods": {
-        "0": "Area_EZFD_City_Constant_HLOD_Lod0.obj"
-      },
-      "position": {
-        "x": 221.0,
-        "y": 666.0,
-        "z": -636.0
-      }
-    },
-    {
-      "name": "Area_FDC01_City_Constant_HLOD",
-      "lods": {
-        "0": "Area_FDC01_City_Constant_HLOD_Lod0.obj",
-        "1": "Area_FDC01_City_Constant_HLOD_Lod1.obj"
-      },
-      "position": {
-        "x": 3521.0,
-        "y": 479.0,
-        "z": 4535.0
-      }
-    },
-    {
-      "name": "Area_FDC03_City_Constant_HLOD",
-      "lods": {
-        "0": "Area_FDC03_City_Constant_HLOD_Lod0.obj"
-      },
-      "position": {
-        "x": 3547.0,
-        "y": 490.0,
-        "z": 4545.0
-      }
-    },
-    {
       "name": "Area_FDC_Old01_City_Constant_HLOD",
       "lods": {
         "0": "Area_FDC_Old01_City_Constant_HLOD_Lod0.obj",
@@ -1278,28 +1000,6 @@
       }
     },
     {
-      "name": "Area_GLJT01_City_Constant_HLOD",
-      "lods": {
-        "0": "Area_GLJT01_City_Constant_HLOD_Lod0.obj"
-      },
-      "position": {
-        "x": -40.0,
-        "y": 732.0,
-        "z": -529.0
-      }
-    },
-    {
-      "name": "Area_GLJT_City_Constant_HLOD",
-      "lods": {
-        "0": "Area_GLJT_City_Constant_HLOD_Lod0.obj"
-      },
-      "position": {
-        "x": -411.0,
-        "y": 887.0,
-        "z": -248.0
-      }
-    },
-    {
       "name": "Area_GLYJ_City_Constant_HLOD",
       "lods": {
         "0": "Area_GLYJ_City_Constant_HLOD_Lod0.obj",
@@ -1387,28 +1087,6 @@
       }
     },
     {
-      "name": "Area_HAZD01_City_Constant_HLOD",
-      "lods": {
-        "0": "Area_HAZD01_City_Constant_HLOD_Lod0.obj"
-      },
-      "position": {
-        "x": 650.0,
-        "y": 824.0,
-        "z": -38.0
-      }
-    },
-    {
-      "name": "Area_HAZD02_City_Constant_HLOD",
-      "lods": {
-        "0": "Area_HAZD02_City_Constant_HLOD_Lod0.obj"
-      },
-      "position": {
-        "x": 737.0,
-        "y": 852.0,
-        "z": 82.0
-      }
-    },
-    {
       "name": "Area_HCGDX01_City_HLOD",
       "lods": {
         "0": "Area_HCGDX01_City_HLOD_Lod0.obj"
@@ -1465,28 +1143,6 @@
         "x": -168.45,
         "y": 387.83,
         "z": 10041.58
-      }
-    },
-    {
-      "name": "Area_HJJQD_City_Constant_HLOD",
-      "lods": {
-        "0": "Area_HJJQD_City_Constant_HLOD_Lod0.obj"
-      },
-      "position": {
-        "x": -636.5,
-        "y": 273.1,
-        "z": 9784.1
-      }
-    },
-    {
-      "name": "Area_HJJ_City_Constant_HLOD",
-      "lods": {
-        "0": "Area_HJJ_City_Constant_HLOD_Lod0.obj"
-      },
-      "position": {
-        "x": -386.4283,
-        "y": 274.2264,
-        "z": 9847.355
       }
     },
     {
@@ -1655,17 +1311,6 @@
         "x": 1637.9,
         "y": 240.0,
         "z": 9456.4
-      }
-    },
-    {
-      "name": "Area_HXTD_City_Constant_HLOD",
-      "lods": {
-        "0": "Area_HXTD_City_Constant_HLOD_Lod0.obj"
-      },
-      "position": {
-        "x": -2629.9,
-        "y": 47.8,
-        "z": 5592.1
       }
     },
     {
@@ -1963,17 +1608,6 @@
       }
     },
     {
-      "name": "Area_JRZBBS_City_Constant_HLOD",
-      "lods": {
-        "0": "Area_JRZBBS_City_Constant_HLOD_Lod0.obj"
-      },
-      "position": {
-        "x": 92.0,
-        "y": 218.0,
-        "z": 2662.0
-      }
-    },
-    {
       "name": "Area_JRZBDB01_City_Constant_HLOD",
       "lods": {
         "0": "Area_JRZBDB01_City_Constant_HLOD_Lod0.obj",
@@ -2077,17 +1711,6 @@
       }
     },
     {
-      "name": "Area_JTTL_City_Constant_HLOD",
-      "lods": {
-        "0": "Area_JTTL_City_Constant_HLOD_Lod0.obj"
-      },
-      "position": {
-        "x": -126.0,
-        "y": 710.0,
-        "z": 57.0
-      }
-    },
-    {
       "name": "Area_KXT02_City_Constant_HLOD",
       "lods": {
         "0": "Area_KXT02_City_Constant_HLOD_Lod0.obj",
@@ -2154,17 +1777,6 @@
         "x": 0.0,
         "y": 0.0,
         "z": 0.0
-      }
-    },
-    {
-      "name": "Area_LCDTup_City_Constant_HLOD",
-      "lods": {
-        "0": "Area_LCDTup_City_Constant_HLOD_Lod0.obj"
-      },
-      "position": {
-        "x": 236.0,
-        "y": 664.0,
-        "z": -145.0
       }
     },
     {
@@ -2260,17 +1872,6 @@
         "x": -2836.0,
         "y": 83.0,
         "z": 4466.0
-      }
-    },
-    {
-      "name": "Area_LSLSC_City_Constant_HLOD",
-      "lods": {
-        "0": "Area_LSLSC_City_Constant_HLOD_Lod0.obj"
-      },
-      "position": {
-        "x": -1627.36,
-        "y": 221.5,
-        "z": 9652.44
       }
     },
     {
@@ -2641,31 +2242,6 @@
         "x": 0.0,
         "y": 0.0,
         "z": 0.0
-      }
-    },
-    {
-      "name": "Area_PCDQ_City_Constant_HLOD",
-      "lods": {
-        "0": "Area_PCDQ_City_Constant_HLOD_Lod0.obj",
-        "1": "Area_PCDQ_City_Constant_HLOD_Lod1.obj"
-      },
-      "position": {
-        "x": 5063.07,
-        "y": 220.76,
-        "z": 9614.13
-      }
-    },
-    {
-      "name": "Area_PCGD_City_Constant_HLOD",
-      "lods": {
-        "0": "Area_PCGD_City_Constant_HLOD_Lod0.obj",
-        "1": "Area_PCGD_City_Constant_HLOD_Lod1.obj",
-        "2": "Area_PCGD_City_Constant_HLOD_Lod2.obj"
-      },
-      "position": {
-        "x": 5262.0,
-        "y": 283.0,
-        "z": 9479.0
       }
     },
     {
@@ -3342,18 +2918,6 @@
       }
     },
     {
-      "name": "Area_SYRYD_City_Constant_HLOD",
-      "lods": {
-        "0": "Area_SYRYD_City_Constant_HLOD_Lod0.obj",
-        "1": "Area_SYRYD_City_Constant_HLOD_Lod1.obj"
-      },
-      "position": {
-        "x": 6053.0,
-        "y": 240.0,
-        "z": 9911.0
-      }
-    },
-    {
       "name": "Area_SYZWB_City_Constant_HLOD",
       "lods": {
         "1": "Area_SYZWB_City_Constant_HLOD_Lod1.obj"
@@ -3456,18 +3020,6 @@
         "x": 0.0,
         "y": 0.0,
         "z": 0.0
-      }
-    },
-    {
-      "name": "Area_TDZ_City_Constant_HLOD",
-      "lods": {
-        "0": "Area_TDZ_City_Constant_HLOD_Lod0.obj",
-        "1": "Area_TDZ_City_Constant_HLOD_Lod1.obj"
-      },
-      "position": {
-        "x": 5941.0,
-        "y": 290.0,
-        "z": 9715.0
       }
     },
     {
@@ -3664,33 +3216,6 @@
       }
     },
     {
-      "name": "Area_YJFD05_City_Constant_HLOD_Lod0 (1)",
-      "lods": {},
-      "position": {
-        "x": 1235.0,
-        "y": 1155.2,
-        "z": -3875.0
-      }
-    },
-    {
-      "name": "Area_YJFD05_City_Constant_HLOD_Lod0 (2)",
-      "lods": {},
-      "position": {
-        "x": 501.08276,
-        "y": 1175.7,
-        "z": 3412.042
-      }
-    },
-    {
-      "name": "Area_YJFD05_City_Constant_HLOD_Lod0 (3)",
-      "lods": {},
-      "position": {
-        "x": 3081.2002,
-        "y": 1294.2,
-        "z": 1811.8999
-      }
-    },
-    {
       "name": "Area_YJFD06_City_Constant_HLOD",
       "lods": {
         "0": "Area_YJFD06_City_Constant_HLOD_Lod0.obj"
@@ -3699,53 +3224,6 @@
         "x": 3572.0,
         "y": 1114.0,
         "z": -1071.0
-      }
-    },
-    {
-      "name": "Area_YJFD06_City_Constant_HLOD_Lod0 (1)",
-      "lods": {},
-      "position": {
-        "x": 13.0,
-        "y": 572.4,
-        "z": -4274.0
-      }
-    },
-    {
-      "name": "Area_YJFD06_City_Constant_HLOD_Lod0 (3)",
-      "lods": {},
-      "position": {
-        "x": 3462.0,
-        "y": 1019.0,
-        "z": 978.0
-      }
-    },
-    {
-      "name": "Area_YJFD09_City_Constant_HLOD",
-      "lods": {
-        "0": "Area_YJFD09_City_Constant_HLOD_Lod0.obj"
-      },
-      "position": {
-        "x": 3204.0,
-        "y": 1326.6,
-        "z": 2271.0
-      }
-    },
-    {
-      "name": "Area_YJFD09_City_Constant_HLOD_Lod0 (2)",
-      "lods": {},
-      "position": {
-        "x": -4120.5,
-        "y": 1304.5,
-        "z": 188.80005
-      }
-    },
-    {
-      "name": "Area_YJFD09_City_Constant_HLOD_Lod0 (3)",
-      "lods": {},
-      "position": {
-        "x": -3206.0,
-        "y": 1010.7,
-        "z": -2903.0
       }
     },
     {
@@ -3905,24 +3383,12 @@
     {
       "name": "Area_YXGTD01_City_Constant_HLOD",
       "lods": {
-        "0": "Area_YXGTD01_City_Constant_HLOD_Lod0.obj",
         "1": "Area_YXGTD01_City_Constant_HLOD_Lod1.obj"
       },
       "position": {
         "x": 192.0,
         "y": 396.0,
         "z": 1156.0
-      }
-    },
-    {
-      "name": "Area_YXGTD02_City_Constant_HLOD",
-      "lods": {
-        "0": "Area_YXGTD02_City_Constant_HLOD_Lod0.obj"
-      },
-      "position": {
-        "x": 116.0,
-        "y": 226.0,
-        "z": 1209.0
       }
     },
     {
@@ -3934,42 +3400,6 @@
         "x": 0.0,
         "y": 0.0,
         "z": 0.0
-      }
-    },
-    {
-      "name": "Area_YZTXG01_City_Constant_HLOD",
-      "lods": {
-        "0": "Area_YZTXG01_City_Constant_HLOD_Lod0.obj",
-        "1": "Area_YZTXG01_City_Constant_HLOD_Lod1.obj"
-      },
-      "position": {
-        "x": 5937.0,
-        "y": 201.0,
-        "z": 9839.0
-      }
-    },
-    {
-      "name": "Area_YZTXG02_City_Constant_HLOD",
-      "lods": {
-        "0": "Area_YZTXG02_City_Constant_HLOD_Lod0.obj",
-        "1": "Area_YZTXG02_City_Constant_HLOD_Lod1.obj"
-      },
-      "position": {
-        "x": 6051.0,
-        "y": 201.0,
-        "z": 9831.0
-      }
-    },
-    {
-      "name": "Area_YZTXG04_City_Constant_HLOD",
-      "lods": {
-        "0": "Area_YZTXG04_City_Constant_HLOD_Lod0.obj",
-        "1": "Area_YZTXG04_City_Constant_HLOD_Lod1.obj"
-      },
-      "position": {
-        "x": 6138.0,
-        "y": 209.0,
-        "z": 9842.0
       }
     },
     {
@@ -4171,39 +3601,6 @@
       }
     },
     {
-      "name": "Area_Zsk01up_City_Constant_HLOD",
-      "lods": {
-        "0": "Area_Zsk01up_City_Constant_HLOD_Lod0.obj"
-      },
-      "position": {
-        "x": 120.0,
-        "y": 633.0,
-        "z": 344.0
-      }
-    },
-    {
-      "name": "Area_Zsk02up_City_Constant_HLOD",
-      "lods": {
-        "0": "Area_Zsk02up_City_Constant_HLOD_Lod0.obj"
-      },
-      "position": {
-        "x": -80.0,
-        "y": 690.0,
-        "z": 338.0
-      }
-    },
-    {
-      "name": "Area_Zskrkup_City_Constant_HLOD",
-      "lods": {
-        "0": "Area_Zskrkup_City_Constant_HLOD_Lod0.obj"
-      },
-      "position": {
-        "x": 259.0,
-        "y": 692.0,
-        "z": 116.0
-      }
-    },
-    {
       "name": "Area_Zsktth_City_Constant_HLOD",
       "lods": {
         "0": "Area_Zsktth_City_Constant_HLOD_Lod0.obj"
@@ -4212,173 +3609,6 @@
         "x": 293.0,
         "y": 647.0,
         "z": 294.0
-      }
-    },
-    {
-      "name": "Cavern_JCYZ00_City_Constant_HLOD",
-      "lods": {
-        "0": "Cavern_JCYZ00_City_Constant_HLOD_Lod0.obj"
-      },
-      "position": {
-        "x": 3282.0,
-        "y": 409.0,
-        "z": 4563.0
-      }
-    },
-    {
-      "name": "Cavern_JCYZ02_City_Constant_HLOD",
-      "lods": {
-        "0": "Cavern_JCYZ02_City_Constant_HLOD_Lod0.obj"
-      },
-      "position": {
-        "x": 3255.0,
-        "y": 306.0,
-        "z": 4416.0
-      }
-    },
-    {
-      "name": "Cavern_JCYZ03_City_Constant_HLOD",
-      "lods": {
-        "0": "Cavern_JCYZ03_City_Constant_HLOD_Lod0.obj"
-      },
-      "position": {
-        "x": 3200.0,
-        "y": 219.0,
-        "z": 4144.0
-      }
-    },
-    {
-      "name": "Cavern_JCYZ04_City_Constant_HLOD",
-      "lods": {
-        "0": "Cavern_JCYZ04_City_Constant_HLOD_Lod0.obj"
-      },
-      "position": {
-        "x": 3461.3,
-        "y": 212.0,
-        "z": 4252.0
-      }
-    },
-    {
-      "name": "Cavern_JCYZ05_City_Constant_HLOD",
-      "lods": {
-        "0": "Cavern_JCYZ05_City_Constant_HLOD_Lod0.obj"
-      },
-      "position": {
-        "x": 3796.0,
-        "y": 256.0,
-        "z": 4149.0
-      }
-    },
-    {
-      "name": "Cavern_JL_City_Constant_HLOD",
-      "lods": {
-        "0": "Cavern_JL_City_Constant_HLOD_Lod0.obj"
-      },
-      "position": {
-        "x": 3218.0,
-        "y": 327.0,
-        "z": 4171.0
-      }
-    },
-    {
-      "name": "Cavern_JSDTD_City_Constant_HLOD",
-      "lods": {
-        "0": "Cavern_JSDTD_City_Constant_HLOD_Lod0.obj"
-      },
-      "position": {
-        "x": 2764.0,
-        "y": 314.0,
-        "z": 4778.0
-      }
-    },
-    {
-      "name": "Cavern_JSKD_City_Constant_HLOD",
-      "lods": {
-        "0": "Cavern_JSKD_City_Constant_HLOD_Lod0.obj"
-      },
-      "position": {
-        "x": 2344.0,
-        "y": 238.0,
-        "z": 4701.0
-      }
-    },
-    {
-      "name": "Cavern_SYZNB_City_Constant_HLOD",
-      "lods": {
-        "0": "Cavern_SYZNB_City_Constant_HLOD_Lod0.obj"
-      },
-      "position": {
-        "x": 2764.0,
-        "y": 385.0,
-        "z": 4188.0
-      }
-    },
-    {
-      "name": "Cavern_YSZJ_City_Constant_HLOD",
-      "lods": {
-        "0": "Cavern_YSZJ_City_Constant_HLOD_Lod0.obj"
-      },
-      "position": {
-        "x": 2260.0,
-        "y": 286.0,
-        "z": 5073.0
-      }
-    },
-    {
-      "name": "Cavern_YZTSJ_City_Constant_HLOD",
-      "lods": {
-        "0": "Cavern_YZTSJ_City_Constant_HLOD_Lod0.obj",
-        "1": "Cavern_YZTSJ_City_Constant_HLOD_Lod1.obj"
-      },
-      "position": {
-        "x": 5525.0,
-        "y": 202.0,
-        "z": 9852.0
-      }
-    },
-    {
-      "name": "Tunnel_CLBHTD02_City_Constant_HLOD",
-      "lods": {
-        "0": "Tunnel_CLBHTD02_City_Constant_HLOD_Lod0.obj",
-        "1": "Tunnel_CLBHTD02_City_Constant_HLOD_Lod1.obj"
-      },
-      "position": {
-        "x": 5839.0,
-        "y": 229.0,
-        "z": 9612.0
-      }
-    },
-    {
-      "name": "Tunnel_JSTD_City_Constant_HLOD",
-      "lods": {
-        "0": "Tunnel_JSTD_City_Constant_HLOD_Lod0.obj"
-      },
-      "position": {
-        "x": 2885.0,
-        "y": 372.0,
-        "z": 4655.0
-      }
-    },
-    {
-      "name": "Tunnel_MONVNDK_City_Constant_HLOD",
-      "lods": {
-        "0": "Tunnel_MONVNDK_City_Constant_HLOD_Lod0.obj"
-      },
-      "position": {
-        "x": 5471.12,
-        "y": 247.16,
-        "z": 9737.52
-      }
-    },
-    {
-      "name": "Tunnel_YHTTD_City_Constant_HLOD",
-      "lods": {
-        "0": "Tunnel_YHTTD_City_Constant_HLOD_Lod0.obj"
-      },
-      "position": {
-        "x": 2544.0,
-        "y": 159.0,
-        "z": 4547.0
       }
     }
   ],
@@ -5060,17 +4290,6 @@
         "x": 1985.0,
         "y": 180.0,
         "z": 10636.0
-      }
-    },
-    {
-      "name": "Tunnel_JYQQD_City_Constant_HLOD",
-      "lods": {
-        "0": "Tunnel_JYQQD_City_Constant_HLOD_Lod0.obj"
-      },
-      "position": {
-        "x": 1456.0,
-        "y": 406.0,
-        "z": 4541.0
       }
     },
     {
