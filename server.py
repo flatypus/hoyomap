@@ -11,7 +11,6 @@ GAME = BASE / "game_data"
 ASSET_ROUTES = {
     "hlod":      (GAME / "hlod",     ".obj", "model/obj"),
     "terrain":   (GAME / "terrain",  ".obj", "model/obj"),
-    "water":     (GAME / "water",    ".obj", "model/obj"),
     "hlod_all":  (GAME / "hlod_all", ".obj", "model/obj"),
     "textures":  (GAME / "textures", ".png", "image/png"),
 }
@@ -47,7 +46,7 @@ class Handler(http.server.SimpleHTTPRequestHandler):
         super().__init__(*a, directory=str(BASE), **kw)
 
     def do_GET(self):
-        path = self.path.split("?")[0]  # strip query params
+        path = self.path.split("?")[0]
 
         # Single-file routes
         if path in SINGLE_FILE_ROUTES:
@@ -100,9 +99,8 @@ class Handler(http.server.SimpleHTTPRequestHandler):
         super().end_headers()
 
     def log_message(self, format, *args):
-        if args and isinstance(args[0], str):
-            if args[0].startswith("GET") or args[0].startswith("code 404"):
-                return
+        if any(str(arg) == "404" for arg in args):
+            return
         super().log_message(format, *args)
 
 

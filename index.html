@@ -42,6 +42,9 @@
     import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
  
     // #section constants
+    const IS_VERCEL = !['localhost', '127.0.0.1'].includes(window.location.hostname);
+    const CDN = IS_VERCEL ? 'https://cdn.flatypus.me/genshin/game_data' : '';
+
     const BLOCK_SIZE = 1024;
     const HALF_BLOCK = 512;
     const LOD_UPDATE_MS = 500;
@@ -137,7 +140,7 @@
     const gltfLoader = new GLTFLoader();
     const texLoader = new THREE.TextureLoader();
 
-    const mondstadtTex = texLoader.load('/textures/Stages_Texture_Area_Mengde_City_HLOD_Combined_Diffuse.png');
+    const mondstadtTex = texLoader.load(CDN + '/textures/Stages_Texture_Area_Mengde_City_HLOD_Combined_Diffuse.png');
     mondstadtTex.colorSpace = THREE.SRGBColorSpace;
 
     // #section materials
@@ -219,7 +222,7 @@
         const key = `${bx}_${bz}`;
         if (state.textureCache.has(key)) return Promise.resolve(state.textureCache.get(key));
 
-        const url = `/textures/BigWorldTerrain_${bx}_${bz}.bin_BaseMap.png`;
+        const url = CDN + `/textures/BigWorldTerrain_${bx}_${bz}.bin_BaseMap.png`;
         if (state.failedUrls.has(url)) return Promise.resolve(null);
 
         return new Promise(resolve => {
@@ -315,7 +318,7 @@
 
         if (state.loading.has(filename)) return null;
         const endpoint = type === 'hlod' ? '/hlod/' : '/terrain/';
-        const url = endpoint + filename;
+        const url = CDN + endpoint + filename;
         if (state.failedUrls.has(url)) return null;
 
         state.loading.add(filename);
@@ -377,7 +380,7 @@
         }
 
         if (state.loading.has(filename)) return null;
-        const url = '/hlod_all/' + filename;
+        const url = CDN + '/hlod_all/' + filename;
         if (state.failedUrls.has(url)) return null;
 
         state.loading.add(filename);
