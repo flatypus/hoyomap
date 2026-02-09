@@ -40,10 +40,9 @@
     import { PointerLockControls } from 'three/addons/controls/PointerLockControls.js';
     import { OBJLoader } from 'three/addons/loaders/OBJLoader.js';
     import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
- 
-    // #section constants
-    const IS_VERCEL = !['localhost', '127.0.0.1'].includes(window.location.hostname);
-    const CDN = IS_VERCEL ? 'https://cdn.flatypus.me/genshin/game_data' : '';
+    const IS_PROD = !['localhost', '127.0.0.1'].includes(window.location.hostname);
+    const CDN = IS_PROD ? 'https://cdn.flatypus.me/genshin/game_data' : '';
+    const BASE = IS_PROD ? 'https://cdn.flatypus.me/genshin' : '';
 
     const BLOCK_SIZE = 1024;
     const HALF_BLOCK = 512;
@@ -261,7 +260,7 @@
 
     async function loadOverrides() {
         try {
-            const resp = await fetch('/overrides.json');
+            const resp = await fetch(BASE + '/overrides.json');
             if (!resp.ok) return;
             const data = await resp.json();
             for (const [id, pos] of Object.entries(data)) state.overrides.set(id, pos);
@@ -411,7 +410,7 @@
 
     async function loadOcean() {
         if (state.oceanMesh || !state.show.water) return;
-        const url = '/ocean.glb';
+        const url = BASE + '/ocean.glb';
         if (state.failedUrls.has(url) || state.loading.has('ocean.glb')) return;
 
         state.loading.add('ocean.glb');
@@ -736,7 +735,7 @@
 
     // #section init & animate
     async function init() {
-        texLoader.load('/skybox.png', tex => {
+        texLoader.load(BASE + '/skybox.png', tex => {
             const pmrem = new THREE.PMREMGenerator(renderer);
             const env = pmrem.fromEquirectangular(tex).texture;
             scene.environment = env;
@@ -745,8 +744,8 @@
         }, undefined, () => console.log('No skybox available'));
 
         const [manifestResp, allHlodResp] = await Promise.all([
-            fetch('/manifest'),
-            fetch('/all_hlod_manifest'),
+            fetch(BASE + '/manifests/android_manifest.json'),
+            fetch(BASE + '/manifests/all_hlod_manifest.json'),
         ]);
         state.manifest = await manifestResp.json();
         const allHlod = await allHlodResp.json();
@@ -765,7 +764,8 @@
         }
 
         // Discover extra HLOD blocks not in manifest
-        const hlodFiles = await fetch('/list_hlod').then(r => r.json());
+        const hlodListUrl = IS_PROD ? CDN + '/hlod_list.json' : '/list_hlod';
+        const hlodFiles = await fetch(hlodListUrl).then(r => r.json()).catch(() => []);
         for (const f of hlodFiles) {
             if (!f.includes('Lod0')) continue;
             const m = f.match(/Stages_BigWorld_(-?\d+)_(-?\d+)_/);
